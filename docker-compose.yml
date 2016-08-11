@@ -11,6 +11,19 @@ services:
     container_name: 'kac-mysql-data'
     image: 'arungupta/mysql-data-container'
 
+  ################
+  ## REDIS DATA ##
+  ################
+
+  kac-redis-data:
+    build:
+      context: .
+      dockerfile: ./docker/build-redis-data/Dockerfile
+    container_name: 'kac-redis-data'
+    image: 'kenoantigen/kac-redis-data'
+    volumes:
+      - '/data'
+
   ##################
   ## MYSQL SERVER ##
   ##################
@@ -32,6 +45,21 @@ services:
   kac-redis:
     container_name: 'kac-redis'
     image: redis
+    depends_on:
+      - 'kac-redis-data'
+    volumes_from:
+      - 'kac-redis-data'
+    command: 'redis-server --appendonly yes'
+
+  kac-redis-cli:
+    container_name: 'kac-redis-cli'
+    image: redis
+    depends_on:
+      - 'kac-redis-data'
+    volumes_from:
+      - 'kac-redis-data'
+    command: 'redis-cli'
+
 
   ############
   ## CLIENT ##
@@ -41,6 +69,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/build-client/Dockerfile
+    command: '/bin/bash'
     command: '/bin/bash'
     container_name: 'kac-client'
     depends_on:
