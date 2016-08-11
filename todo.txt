@@ -1,0 +1,8 @@
+Create a Keno-Antigen official client.
+
+ * Based on WebSocket using AnyEvent::WebSocket::Client
+ * Interactive console to control the client
+ * database to hold local copy of server state
+ * can configure automatic processes such as build/repair from a range of options
+ * can view status of each colony, suggestions as to what to do
+

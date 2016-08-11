@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+
+  ################
+  ## MYSQL DATA ##
+  ################
+
+  kac-mysql-data:
+    command: '/bin/bash'
+    container_name: 'kac-mysql-data'
+    image: 'arungupta/mysql-data-container'
+
+  ##################
+  ## MYSQL SERVER ##
+  ##################
+
+  kac-mysql-server:
+    container_name: 'kac-mysql-server'
+    depends_on:
+      - 'kac-mysql-data'
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=secret'
+    image: 'mysql:5.5'
+    volumes_from:
+      - 'kac-mysql-data'
+
+  ###########
+  ## REDIS ##
+  ###########
+
+  kac-redis:
+    container_name: 'kac-redis'
+    image: redis
+    ports:
+      - '6379:6379'
+
+  ############
+  ## CLIENT ##
+  ############
+
+  kac-client:
+    build:
+      context: .
+      dockerfile: ./docker/build-client/Dockerfile
+    command: '/bin/bash startclient.sh'
+    container_name: 'kac-client'
+    depends_on:
+      - 'kac-mysql-server'
+      - 'kac-redis'
+    image: 'kenoantigen/kac-client'
+    volumes:
+      - ./bin:/home/keno/kac-server/bin
+      - ./docs:/home/keno/kac-server/docs
+      - ./etc:/home/keno/kac-server/etc
+      - ./log:/home/keno/kac-server/log
+      - ./lib:/home/keno/kac-server/lib
+      - ./t:/home/keno/kac-server/t
+      - ./var:/home/keno/kac-server/var
+
