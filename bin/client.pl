@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use lib '/home/keno/ka-perl-client/lib';
+use lib '/home/keno/kac-client/lib';
 use Log::Log4perl;
 
 use KAC::Config;
@@ -16,15 +16,15 @@ KAC::Config->initialize;
 
 # Connect to the mysql Docker image
 #
-my $db = KA::DB->connect(
-    'DBI:SQLite:/home/keno/kac-server/log/test.db',
+my $db = KAC::DB->connect(
+    'DBI:SQLite:/home/keno/kac-client/log/test.db',
 );
 
 KAC::SDB->initialize({
     db => $db,
 });
 
-Log::Log4perl->init('/home/keno/kac-server/etc/log4perl.conf');
+Log::Log4perl->init('/home/keno/kac-client/etc/log4perl.conf');
 
 my $app = KAC::App::Client->new_with_command();
 

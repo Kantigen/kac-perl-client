@@ -32,8 +32,6 @@ services:
   kac-redis:
     container_name: 'kac-redis'
     image: redis
-    ports:
-      - '6379:6379'
 
   ############
   ## CLIENT ##
@@ -43,18 +41,18 @@ services:
     build:
       context: .
       dockerfile: ./docker/build-client/Dockerfile
-    command: '/bin/bash startclient.sh'
+    command: '/bin/bash'
     container_name: 'kac-client'
     depends_on:
       - 'kac-mysql-server'
       - 'kac-redis'
     image: 'kenoantigen/kac-client'
     volumes:
-      - ./bin:/home/keno/kac-server/bin
-      - ./docs:/home/keno/kac-server/docs
-      - ./etc:/home/keno/kac-server/etc
-      - ./log:/home/keno/kac-server/log
-      - ./lib:/home/keno/kac-server/lib
-      - ./t:/home/keno/kac-server/t
-      - ./var:/home/keno/kac-server/var
+      - ./bin:/home/keno/kac-client/bin
+      - ./docs:/home/keno/kac-client/docs
+      - ./etc:/home/keno/kac-client/etc
+      - ./log:/home/keno/kac-client/log
+      - ./lib:/home/keno/kac-client/lib
+      - ./t:/home/keno/kac-client/t
+      - ./var:/home/keno/kac-client/var
 
